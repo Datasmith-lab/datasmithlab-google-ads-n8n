@@ -2,7 +2,7 @@
 
 A ready-to-import workflow from DataSmithLab. Collect a bounded snapshot of a competitor's Google ads and keep a deduplicated creative log in your own Google Sheet.
 
-**[View the walkthrough](https://oguzh4850-tech.github.io/datasmithlab-google-ads-n8n/)** · **[Download the starter ZIP](https://github.com/oguzh4850-tech/datasmithlab-google-ads-n8n/releases/latest/download/google-ads-to-sheets-starter.zip)** · **[Google Ads Transparency Scraper on Apify](https://apify.com/datasmithlab/google-ads-transparency-scraper)**
+**[View the walkthrough](https://datasmith-lab.github.io/datasmithlab-google-ads-n8n/)** · **[Download the starter ZIP](https://github.com/Datasmith-lab/datasmithlab-google-ads-n8n/releases/latest/download/google-ads-to-sheets-starter.zip)** · **[Google Ads Transparency Scraper on Apify](https://apify.com/datasmithlab/google-ads-transparency-scraper)**
 
 ## What it does
 
