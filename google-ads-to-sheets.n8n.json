@@ -15,15 +15,42 @@
     {
       "id": "d9f318b1-54b9-4900-9c28-1d9ff22031f6",
       "name": "Configuration",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
       "position": [
         440,
         300
       ],
       "parameters": {
-        "mode": "runOnceForAllItems",
-        "jsCode": "return [{json:{\n  spreadsheetId:'REPLACE_WITH_SPREADSHEET_ID',\n  baselineOnEmptyScope:true,\n  maxTotalChargeUsd:0.10,\n  actorInput:{domains:['nike.com'],region:'US',resultType:'ads',\n    includeAdContent:true,includeDetails:false,onlyNewAds:false,\n    maxAdsPerTarget:20,maxItems:20}\n}}];"
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab75aeb6-58d4-49b0-919e-2b2959a47d0c",
+              "name": "spreadsheetId",
+              "type": "string",
+              "value": "REPLACE_WITH_SPREADSHEET_ID"
+            },
+            {
+              "id": "1624c286-8628-458b-8c9e-1d23b2e80d20",
+              "name": "baselineOnEmptyScope",
+              "type": "boolean",
+              "value": true
+            },
+            {
+              "id": "ec5cd70f-8eb4-4138-8fef-664e2a2d7a09",
+              "name": "maxTotalChargeUsd",
+              "type": "number",
+              "value": 0.1
+            },
+            {
+              "id": "8c32cec8-5612-4a49-a794-c90239e55724",
+              "name": "actorInput",
+              "type": "object",
+              "value": "{\"domains\": [\"nike.com\"], \"region\": \"US\", \"resultType\": \"ads\", \"includeAdContent\": true, \"includeDetails\": false, \"onlyNewAds\": false, \"maxAdsPerTarget\": 20, \"maxItems\": 20}"
+            }
+          ]
+        },
+        "options": {}
       }
     },
     {
@@ -316,7 +343,7 @@
     },
     {
       "id": "b164f068-ae76-4664-bbf3-036ca06f2326",
-      "name": "Save ads and pending status",
+      "name": "Save ads",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
@@ -530,9 +557,10 @@
         300
       ],
       "parameters": {
-        "content": "## Google Ads to Google Sheets\nImport inactive. Configure your spreadsheet ID and credentials, then run manually.\nDaily schedule: 09:00 UTC. Activate only after validation.\nOne Actor launch per execution. 20-ad snapshot, $0.10 max run charge.\nFirst-seen IDs are not verified newly published ads.\nUse one execution at a time and a dedicated Ads tab.",
-        "height": 400,
-        "width": 580
+        "content": "# Track competitor Google ads in Google Sheets with Apify\n\n## Who is this for?\n\nMarketing analysts who want a repeatable, bounded log of a competitor's Google ads without maintaining scraper infrastructure.\n\n## What it does\n\nThe workflow reads saved keys, launches one Apify Actor, waits for completion, checks HEALTH/TARGETS and upserts records into Google Sheets. An empty scope starts a baseline. Later unseen IDs are logged; first-seen time does not prove publication time. Older rows are retained.\n\n## Setup\n\nCreate a private Ads tab using the supplied CSV headers. Import the inactive workflow. In Configuration, set your spreadsheet ID and Actor input. Connect Header Auth on five Apify HTTP nodes and Google Sheets OAuth2 on both Sheets nodes. Run manually twice, inspect reports and check stable keys before activating the daily 09:00 UTC schedule. Keep Start Actor's Execute Once enabled and run sequentially.\n\n## Requirements and customization\n\nUse your own Apify account/token and Google spreadsheet edit access. Defaults: one domain, US, 20 ads, details off, Actor tracking off and a $0.10 Actor charge cap. Hosting and other service costs are separate. Change the domain/region for your use case; each filter scope establishes its own baseline.\n\nTested on self-hosted n8n 2.26.4. Other environments need validation. This is not a complete competitor inventory and sends no notifications.\n\n[Setup guide and headers](https://github.com/Datasmith-lab/datasmithlab-google-ads-n8n#setup)\n",
+        "height": 1000,
+        "width": 620,
+        "color": 5
       }
     },
     {
@@ -580,7 +608,7 @@
         -500
       ],
       "parameters": {
-        "content": "## 2. Open Configuration\nReplace **REPLACE_WITH_SPREADSHEET_ID** with the text between /d/ and /edit in your Sheet URL.\nSet one lowercase domain and region.\nStart with maxItems=20, maxAdsPerTarget=20.\nKeep onlyNewAds=false: Sheets stores observed IDs.\nDefault Actor charge cap: $0.10; check current prices.",
+        "content": "## 2. Open Configuration (Edit Fields)\nReplace **REPLACE_WITH_SPREADSHEET_ID** in the spreadsheetId field with the text between /d/ and /edit in your Sheet URL.\nSet one lowercase domain and region.\nStart with maxItems=20, maxAdsPerTarget=20.\nKeep onlyNewAds=false: Sheets stores observed IDs.\nDefault Actor charge cap: $0.10; check current prices.",
         "height": 400,
         "width": 500
       }
@@ -595,7 +623,7 @@
         -500
       ],
       "parameters": {
-        "content": "## 3. Connect your own credentials\nApify Header Auth: name **Authorization**, value **Bearer YOUR_APIFY_TOKEN**.\nSelect it on Start Actor, Get run, Get HEALTH, Get TARGETS, Get ads.\nGoogle Sheets OAuth2: select on Read saved ads and Save ads and pending status.\nNever paste real tokens into code or public exports.",
+        "content": "## 3. Connect your own credentials\nApify Header Auth: name **Authorization**, value **Bearer YOUR_APIFY_TOKEN**.\nSelect it on Start Actor, Get run, Get HEALTH, Get TARGETS, Get ads.\nGoogle Sheets OAuth2: select on Read saved ads and Save ads.\nNever paste real tokens into code or public exports.",
         "height": 400,
         "width": 500
       }
@@ -789,14 +817,14 @@
       "main": [
         [
           {
-            "node": "Save ads and pending status",
+            "node": "Save ads",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Save ads and pending status": {
+    "Save ads": {
       "main": [
         [
           {

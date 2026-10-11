@@ -13,6 +13,10 @@ A ready-to-import workflow from DataSmithLab. Collect a bounded snapshot of a co
 
 The first run creates a baseline. Later first-seen IDs are marked `logged`. First-seen does not establish publication time; limited snapshots may discover older ads later. No Slack account is needed.
 
+## Full tutorial
+
+[Track competitor Google ads in Google Sheets with n8n](https://datasmith-lab.github.io/datasmithlab-google-ads-n8n/track-google-ads-google-sheets-n8n.html) — credentials, first-run checks, scheduling and snapshot limits.
+
 ## Requirements
 
 - An Apify account with access to the [Actor](https://apify.com/datasmithlab/google-ads-transparency-scraper).
@@ -23,9 +27,9 @@ The first run creates a baseline. Later first-seen IDs are marked `logged`. Firs
 
 1. Create a dedicated spreadsheet. Add a tab named **Ads** and paste the exact header row from `ads-sheet-headers.csv` into row 1. Keep other tabs separate.
 2. Download `google-ads-to-sheets.n8n.json` and import it in n8n. The workflow is inactive.
-3. Open **Configuration** and replace `REPLACE_WITH_SPREADSHEET_ID` with your spreadsheet ID. Replace the example `nike.com` domain and `US` region if needed. Start with 20 rows.
+3. Open **Configuration (Edit Fields)** and replace `REPLACE_WITH_SPREADSHEET_ID` with your spreadsheet ID. Replace the example `nike.com` domain and `US` region if needed. Start with 20 rows.
 4. Create an n8n **Header Auth** credential: name `Authorization`, value `Bearer YOUR_APIFY_TOKEN`. Select it on **Start Actor**, **Get run**, **Get HEALTH**, **Get TARGETS** and **Get ads**. Keep the token in the credential store, never in node text or exported JSON.
-5. Select your **Google Sheets OAuth2** credential on **Read saved ads** and **Save ads and pending status**. The latter's historical node name refers to the common delivery engine; this Sheets-only version writes `baseline`/`logged`. Refresh columns if your n8n version requires it; keep `key` as the matching column and RAW input mode.
+5. For a new Google connection, follow the [official OAuth2 setup guide](https://docs.n8n.io/integrations/builtin/credentials/google/oauth-single-service/). n8n Cloud supports managed sign-in; self-hosted instances require custom OAuth setup. Select your **Google Sheets OAuth2** credential on **Read saved ads** and **Save ads**. Refresh columns if your n8n version requires it; keep `key` as the matching column and RAW input mode.
 6. Run **Manual start**. Confirm the Actor succeeded, health checks passed and the Ads tab contains baseline rows. An error stops the flow; do not enable Continue On Fail.
 7. Run again. Repeated IDs should retain the same key rather than create duplicate rows. Check the summary and your sheet before enabling the schedule.
 8. Publish/activate only after your live setup passes. The schedule is **09:00 UTC**; change it to your preferred time. Self-hosted n8n and its computer/server must stay running. Allow one execution at a time; do not overlap manual and scheduled runs.
@@ -46,7 +50,7 @@ The numbered notes inside the workflow follow the same four stages: prepare, con
 - [ ] Repeat run updates stable keys without duplicates and preserves firstSeenAt. New unseen IDs may increase the total; first-seen is not publication time.
 - [ ] Enable the daily schedule only after the checks pass. Keep one execution at a time.
 
-Your spreadsheet ID is the text between `/d/` and `/edit` in its URL. Set it only in Configuration. The $0.10 setting is an Actor run charge cap, not a guarantee of all service costs. OAuth setup time varies; no three-minute setup promise is made.
+Your spreadsheet ID is the text between `/d/` and `/edit` in its URL. Set it only in the spreadsheetId field in Configuration (Edit Fields). The $0.10 setting is an Actor run charge cap, not a guarantee of all service costs. OAuth setup time varies; no three-minute setup promise is made.
 
 ## Scope and costs
 
