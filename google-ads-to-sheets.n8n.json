@@ -554,6 +554,66 @@
           ]
         }
       }
+    },
+    {
+      "id": "9b6b07ee-8de1-42e9-a99e-8b7d68b6817c",
+      "name": "1 \u00b7 Open Actor & prepare Ads tab",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -600,
+        -500
+      ],
+      "parameters": {
+        "content": "## 1. Prepare your accounts\n[Open Google Ads Transparency Scraper on Apify](https://apify.com/datasmithlab/google-ads-transparency-scraper)\nCheck Actor access and pricing.\nCreate a private Sheet with a tab named **Ads**.\nPaste ads-sheet-headers.csv into row 1.\nKeep this imported workflow inactive.",
+        "height": 400,
+        "width": 500
+      }
+    },
+    {
+      "id": "14807c88-2ed5-4d2c-9df4-08f52922ff89",
+      "name": "2 \u00b7 Configure your snapshot",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -50,
+        -500
+      ],
+      "parameters": {
+        "content": "## 2. Open Configuration\nReplace **REPLACE_WITH_SPREADSHEET_ID** with the text between /d/ and /edit in your Sheet URL.\nSet one lowercase domain and region.\nStart with maxItems=20, maxAdsPerTarget=20.\nKeep onlyNewAds=false: Sheets stores observed IDs.\nDefault Actor charge cap: $0.10; check current prices.",
+        "height": 400,
+        "width": 500
+      }
+    },
+    {
+      "id": "a7a0646d-c699-406a-b2c2-de8213dc60d9",
+      "name": "3 \u00b7 Connect credentials",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        500,
+        -500
+      ],
+      "parameters": {
+        "content": "## 3. Connect your own credentials\nApify Header Auth: name **Authorization**, value **Bearer YOUR_APIFY_TOKEN**.\nSelect it on Start Actor, Get run, Get HEALTH, Get TARGETS, Get ads.\nGoogle Sheets OAuth2: select on Read saved ads and Save ads and pending status.\nNever paste real tokens into code or public exports.",
+        "height": 400,
+        "width": 500
+      }
+    },
+    {
+      "id": "d9789ce0-d129-4953-a5c3-d439428e9e33",
+      "name": "4 \u00b7 Verify before scheduling",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1050,
+        -500
+      ],
+      "parameters": {
+        "content": "## 4. Run Manual start twice\nFirst: SUCCEEDED Actor, HEALTH/TARGETS checked, baseline rows in Ads.\nRun summary: observedRows <=20; savedRows matches this scope's keys.\nSecond: repeated IDs update, not duplicate; firstSeenAt stays unchanged.\nFresh unseen IDs may legitimately increase savedRows.\nKeep Start Actor Execute Once enabled.\nOnly then activate daily 09:00 UTC. One execution at a time.",
+        "height": 400,
+        "width": 500
+      }
     }
   ],
   "connections": {

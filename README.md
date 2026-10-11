@@ -30,6 +30,24 @@ The first run creates a baseline. Later first-seen IDs are marked `logged`. Firs
 7. Run again. Repeated IDs should retain the same key rather than create duplicate rows. Check the summary and your sheet before enabling the schedule.
 8. Publish/activate only after your live setup passes. The schedule is **09:00 UTC**; change it to your preferred time. Self-hosted n8n and its computer/server must stay running. Allow one execution at a time; do not overlap manual and scheduled runs.
 
+## First-run checklist
+
+The numbered notes inside the workflow follow the same four stages: prepare, configure, connect, verify. [Open the Actor](https://apify.com/datasmithlab/google-ads-transparency-scraper) before configuring credentials.
+
+![Illustrated setup reference with placeholder values](setup-reference.svg)
+
+*Illustrated reference, not a screenshot of a connected account. Placeholder values only.*
+
+- [ ] Ads tab contains the exact CSV headers; your Sheet remains private.
+- [ ] Configuration contains your Sheet ID, one domain and a small 20-row snapshot.
+- [ ] All five Apify HTTP nodes use Header Auth; both Sheets nodes use Google OAuth2.
+- [ ] Start Actor has Execute Once enabled; workflow is inactive during setup.
+- [ ] First manual run succeeds and Run summary is reached; inspect HEALTH/TARGETS and baseline rows.
+- [ ] Repeat run updates stable keys without duplicates and preserves firstSeenAt. New unseen IDs may increase the total; first-seen is not publication time.
+- [ ] Enable the daily schedule only after the checks pass. Keep one execution at a time.
+
+Your spreadsheet ID is the text between `/d/` and `/edit` in its URL. Set it only in Configuration. The $0.10 setting is an Actor run charge cap, not a guarantee of all service costs. OAuth setup time varies; no three-minute setup promise is made.
+
 ## Scope and costs
 
 Defaults: one domain (`nike.com`), US, ads mode, copy on, details off, `maxItems=20`, `maxAdsPerTarget=20`, Actor-side `onlyNewAds=false`. The Sheet owns saved-ID history so downstream retries can reread existing records.
